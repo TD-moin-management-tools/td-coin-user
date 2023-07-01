@@ -3,19 +3,28 @@ import { useAtom } from "jotai";
 import { Avatar, Button } from "antd";
 import { WalletAddress, UserAvatar, UserName } from "@/atoms/userInfo";
 import { useRouter } from "next/navigation";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
+import { useEffect } from "react";
 
 export default function User() {
   const router = useRouter();
 
-  const [walletAddress] = useAtom(WalletAddress);
+  const { address, isConnected } = useAccount();
+
+  const [walletAddress, setWalletAddress] = useAtom(WalletAddress);
   const [userAvatar] = useAtom(UserAvatar);
   const [userName] = useAtom(UserName);
+
+  useEffect(() => {
+    if (isConnected && address) {
+      setWalletAddress(address?.toString());
+    }
+  }, [isConnected]);
 
   const handleChangeInfo = () => {
     router.push("/user/change");
   };
-
-  const handleLinkWallet = () => {};
 
   const renderInfoElm = () => {
     return (
@@ -45,15 +54,9 @@ export default function User() {
   const renderLoginElm = () => {
     return (
       <div className="text-center flex flex-col items-center">
-        <Button
-          className="bg-[#1677ff] mt-80 w-40"
-          type="primary"
-          size="large"
-          onClick={handleLinkWallet}
-        >
-          链接钱包
-        </Button>
-        <p className="mt-5">连接钱包不会触发任何链上交易</p>
+        <p className="mt-80 mb-5">连接钱包不会触发任何链上交易</p>
+        {/* TODO： 链接钱包的位置后续改一下 */}
+        <ConnectButton label="链接钱包" showBalance={false} />
       </div>
     );
   };
