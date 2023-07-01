@@ -5,7 +5,7 @@ import type { TFillInItemMap, IFillInItemDetail } from "./mock";
 import SubmitModal from "./submitModal";
 import { useState } from "react";
 
-export default function FirstPost() {
+export default function SelfWrite() {
   // 选择的类别
   const [selectedType, setSelectedType] = useState<TFillInItemMap>();
   // 选择具体项目
