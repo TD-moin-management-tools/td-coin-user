@@ -19,6 +19,8 @@ export default function User() {
   useEffect(() => {
     if (isConnected && address) {
       setWalletAddress(address?.toString());
+    } else {
+      setWalletAddress("");
     }
   }, [isConnected]);
 
@@ -29,7 +31,7 @@ export default function User() {
   const renderInfoElm = () => {
     return (
       <div className="text-center flex flex-col items-center">
-        <p className="text-2xl mb-10 mt-16 font-bold">Hi~ TokenDance Builder</p>
+        <p className="text-2xl font-bold">Hi~ TokenDance Builder</p>
         <div className="pt-5 w-full flex flex-col items-center justify-center">
           <Avatar
             size={80}
@@ -37,7 +39,6 @@ export default function User() {
             src={<img src={userAvatar} alt="avatar" />}
           />
           <p className="my-3 text-xl">{userName}</p>
-          <p className="text-sm">{walletAddress}</p>
         </div>
         <Button
           className="bg-[#1677ff] absolute bottom-1/4 w-40"
@@ -51,19 +52,20 @@ export default function User() {
     );
   };
 
-  const renderLoginElm = () => {
-    return (
-      <div className="text-center flex flex-col items-center">
-        <p className="mt-80 mb-5">连接钱包不会触发任何链上交易</p>
-        {/* TODO： 链接钱包的位置后续改一下 */}
-        <ConnectButton label="链接钱包" showBalance={false} />
-      </div>
-    );
-  };
-
   return (
-    <main className="h-screen px-5">
-      {walletAddress ? renderInfoElm() : renderLoginElm()}
+    <main className="h-screen px-5 pt-60">
+      {walletAddress ? (
+        <div className="fixed top-5 right-5">
+          <ConnectButton label="链接钱包" showBalance={false} />
+        </div>
+      ) : (
+        <div className="text-center flex flex-col items-center">
+          <p className="mt-20 mb-5">连接钱包不会触发任何链上交易</p>
+          <ConnectButton label="链接钱包" showBalance={false} />
+        </div>
+      )}
+
+      {walletAddress ? renderInfoElm() : null}
     </main>
   );
 }
